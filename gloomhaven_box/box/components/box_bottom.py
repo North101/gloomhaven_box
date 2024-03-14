@@ -1,14 +1,14 @@
 import pysvg
+import pysvg_util as util
 from pysvg import Element, path, svg
 
-from ...util import *
 from ..args import GloomhavenBoxArgs
 
 
-@register_svg()
-class write_svg(RegisterSVGCallable[GloomhavenBoxArgs]):
+@util.register_svg()
+class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
   def __call__(self, args: GloomhavenBoxArgs):
-    helper = Tab(args.tab, args.thickness, args.kerf)
+    helper = util.Tab(args.tab, args.thickness, args.kerf)
 
     length = args.dimension.length
     width = args.dimension.width
@@ -34,58 +34,40 @@ class write_svg(RegisterSVGCallable[GloomhavenBoxArgs]):
         ) | args.cut | path.attrs(fill='red')),
         path(attrs=path.attrs(
             d=path.d([
-                path.d.m(0, 0),
-                m_center(
-                    lambda w, h: v_slots(
-                        width=args.thickness,
-                        height=args.tab,
-                        gap=args.tab,
-                        max_height=d.height,
-                        padding=0,
-                        kerf=args.kerf,
-                    ),
-                    width=d.width,
-                    height=d.height,
+                path.d.m((d.width - args.thickness) / 2, 0),
+                util.v_slots(
+                    width=args.thickness,
+                    height=args.tab,
+                    gap=args.tab,
+                    max_height=d.height,
+                    padding=0,
+                    kerf=args.kerf,
                 ),
             ]),
         ) | args.cut),
         path(attrs=path.attrs(
             d=path.d([
-                path.d.m(0, 0),
-                m_center(
-                    lambda w, h: path.d([
-                        path.d.m(args.thickness, 0),
-                        h_slots(
-                            width=args.tab,
-                            height=args.thickness,
-                            gap=args.tab,
-                            max_width=args.horizontal_dividier_width,
-                            padding=0,
-                            kerf=args.kerf,
-                        ),
-                    ]),
-                    width=d.width + args.horizontal_dividier_width,
-                    height=d.height,
+                path.d.m((d.width + args.thickness) / 2, (d.height - args.thickness) / 2),
+                util.h_slots(
+                    width=args.tab,
+                    height=args.thickness,
+                    gap=args.tab,
+                    max_width=args.horizontal_dividier_width,
+                    padding=0,
+                    kerf=args.kerf,
                 ),
             ]),
         ) | args.cut),
         path(attrs=path.attrs(
             d=path.d([
-                path.d.m(0, 0),
-                m_center(
-                    lambda w, h: path.d([
-                        path.d.m(-args.thickness, 0),
-                        h_slots(
-                            width=args.tab,
-                            height=args.thickness,
-                            gap=args.tab,
-                            max_width=args.horizontal_dividier_width,
-                            padding=0,
-                            kerf=args.kerf,
-                        ),
-                    ]),
-                    width=(d.width * 2) - args.horizontal_dividier_width,
-                    height=d.height,
+                path.d.m(d.width - args.horizontal_dividier_width - args.thickness, (d.height - args.thickness) / 2),
+                util.h_slots(
+                    width=args.tab,
+                    height=args.thickness,
+                    gap=args.tab,
+                    max_width=args.horizontal_dividier_width,
+                    padding=0,
+                    kerf=args.kerf,
                 ),
             ]),
         ) | args.cut),
@@ -100,4 +82,4 @@ class write_svg(RegisterSVGCallable[GloomhavenBoxArgs]):
         children=children,
     )
 
-    return args.output / filename(__file__), s
+    return args.output / util.filename(__file__), s

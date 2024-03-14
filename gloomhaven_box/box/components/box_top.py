@@ -1,9 +1,9 @@
 import enum
 
 import pysvg
-from pysvg import Element, path, svg
+import pysvg_util as util
+from pysvg import Element, path, svg, transforms
 
-from ...util import *
 from ..args import GloomhavenBoxArgs
 
 
@@ -13,8 +13,8 @@ class Variant(enum.Enum):
   BOTTOM = enum.auto()
 
 
-@register_svgs(Variant)
-class write_svg(RegisterSVGCallable[GloomhavenBoxArgs]):
+@util.register_svgs(Variant)
+class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
   def __init__(self, variant: Variant):
     self.variant = variant
 
@@ -22,7 +22,7 @@ class write_svg(RegisterSVGCallable[GloomhavenBoxArgs]):
     length = args.dimension.length
     width = args.dimension.width + (args.thickness * 2)
 
-    horizontal = h_tabs(
+    horizontal = util.h_tabs(
         out=False,
         height=args.thickness,
         width=args.thickness,
@@ -72,4 +72,4 @@ class write_svg(RegisterSVGCallable[GloomhavenBoxArgs]):
         children=children,
     )
 
-    return args.output / filename(__file__, self.variant), s
+    return args.output / util.filename(__file__, self.variant), s

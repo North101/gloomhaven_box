@@ -1,19 +1,19 @@
 import pysvg
+import pysvg_util as util
 from pysvg import Element, path, svg
 
-from ...util import *
 from ..args import GloomhavenBoxArgs
 
 
-@register_svg()
-class write_svg(RegisterSVGCallable[GloomhavenBoxArgs]):
+@util.register_svg()
+class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
   def __call__(self, args: GloomhavenBoxArgs):
     width = args.horizontal_dividier_width
     height = args.dimension.height
 
     top_path = path.d.h(width)
     right_path = path.d.v(height)
-    bottom_path = -h_tabs(
+    bottom_path = -util.h_tabs(
         out=True,
         height=args.thickness,
         width=args.tab,
@@ -22,7 +22,7 @@ class write_svg(RegisterSVGCallable[GloomhavenBoxArgs]):
         padding=0,
         kerf=args.kerf,
     )
-    left_path = -v_tabs(
+    left_path = -util.v_tabs(
         out=True,
         height=args.tab,
         width=args.thickness,
@@ -55,4 +55,4 @@ class write_svg(RegisterSVGCallable[GloomhavenBoxArgs]):
         children=children,
     )
 
-    return args.output / filename(__file__), s
+    return args.output / util.filename(__file__), s
