@@ -67,7 +67,7 @@ class write_svg(util.VariantSVGFile[GloomhavenBoxArgs, Variant]):
               path.d.m(d.width - args.thickness - args.dimension.height, (d.height - args.thickness) / 2),
               util.h_slots(
                   thickness=args.thickness,
-                  slot=args.tab,
+                  slot=args.tab / 2,
                   gap=args.tab,
                   max_width=args.dimension.height,
                   kerf=args.kerf,

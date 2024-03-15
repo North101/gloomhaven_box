@@ -21,7 +21,7 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
     left_path = -vertical
 
     d = path.d([
-        path.d.m(args.thickness, 0),
+        path.d.m(args.thickness, args.thickness),
         top_path,
         right_path,
         bottom_path,
@@ -37,7 +37,7 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
                 path.d.m((d.width - args.thickness) / 2, d.height - args.thickness - args.vertical_divider_height),
                 util.v_slots(
                     thickness=args.thickness,
-                    slot=args.tab,
+                    slot=args.tab / 2,
                     gap=args.tab,
                     max_height=args.vertical_divider_height,
                     kerf=args.kerf,

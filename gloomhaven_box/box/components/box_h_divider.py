@@ -16,7 +16,7 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
     bottom_path = -util.h_tabs(
         out=True,
         thickness=args.thickness,
-        tab=args.tab,
+        tab=args.tab / 2,
         gap=args.tab,
         max_width=width,
         kerf=args.kerf,
@@ -24,14 +24,14 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
     left_path = -util.v_tabs(
         out=True,
         thickness=args.thickness,
-        tab=args.tab,
+        tab=args.tab / 2,
         gap=args.tab,
         max_height=height,
         kerf=args.kerf,
     )
 
     d = path.d([
-        path.d.m(args.thickness, args.thickness),
+        path.d.m(args.thickness, 0),
         top_path,
         right_path,
         bottom_path,
