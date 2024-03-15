@@ -9,14 +9,14 @@ from ..args import GloomhavenBoxArgs
 class write_svg(util.SVGFile[GloomhavenBoxArgs]):
   def __call__(self, args: GloomhavenBoxArgs):
     width = args.horizontal_dividier_width
-    height = args.dimension.height
+    height = args.horizontal_divider_height
 
     top_path = path.d.h(width)
     right_path = path.d.v(height)
     bottom_path = -util.h_tabs(
         out=True,
         thickness=args.thickness,
-        tab=args.tab / 2,
+        tab=args.tab,
         gap=args.tab,
         max_width=width,
         kerf=args.kerf,

@@ -34,12 +34,12 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
         ) | args.cut | path.attrs(fill='red')),
         path(attrs=path.attrs(
             d=path.d([
-                path.d.m((d.width - args.thickness) / 2, 0),
+                path.d.m((d.width - args.thickness) / 2, (d.height - width) / 2),
                 util.v_slots(
                     thickness=args.thickness,
                     slot=args.tab,
                     gap=args.tab,
-                    max_height=d.height,
+                    max_height=width,
                     kerf=args.kerf,
                 ),
             ]),

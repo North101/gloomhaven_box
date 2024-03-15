@@ -22,7 +22,7 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
     right_path = util.v_tabs(
         out=True,
         thickness=args.thickness,
-        tab=args.tab / 2,
+        tab=args.tab,
         gap=args.tab,
         max_height=width,
         kerf=args.kerf,
@@ -30,9 +30,9 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
     bottom_path = -top_path
     left_path = -util.v_center(
         segment=lambda _: path.d([
-            -path.d.h(args.dial.height),
-            path.d.v(args.dial.width),
-            path.d.h(args.dial.height),
+            -path.d.h(args.dia_top.height),
+            path.d.v(args.dia_top.width),
+            path.d.h(args.dia_top.height),
         ]),
         height=width,
     )
@@ -51,7 +51,7 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
         ) | args.cut),
         path(attrs=path.attrs(
             d=path.d([
-                path.d.m(d.width - args.thickness - args.dimension.height, (d.height - args.thickness) / 2),
+                path.d.m(d.width - args.thickness - args.horizontal_divider_height, (d.height - args.thickness) / 2),
                 util.h_slots(
                     thickness=args.thickness,
                     slot=args.tab / 2,

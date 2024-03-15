@@ -43,11 +43,18 @@ class GloomhavenBoxArgs(args.SVGArgs):
           height=types.PositiveFloat(3),
       ),
   )
-  dial: types.Dimension = tap.arg(
+  dia_top: types.Dimension = tap.arg(
       default=types.Dimension(
           length=types.PositiveFloat(136.0),
           width=types.PositiveFloat(70.0),
-          height=types.PositiveFloat(4.25),
+          height=types.PositiveFloat(4.05),
+      ),
+  )
+  dial_bottom: types.Dimension = tap.arg(
+      default=types.Dimension(
+          length=types.PositiveFloat(136.0),
+          width=types.PositiveFloat(70.0),
+          height=types.PositiveFloat(2.05),
       ),
   )
 
@@ -56,8 +63,12 @@ class GloomhavenBoxArgs(args.SVGArgs):
     return (self.dimension.length - self.thickness) / 6
 
   @property
+  def horizontal_divider_height(self):
+    return self.dimension.height
+
+  @property
   def vertical_divider_height(self):
-    return self.dimension.height + self.dial.height
+    return self.horizontal_divider_height + self.dial_bottom.height + self.dia_top.height
 
   @property
   def face_height(self):
