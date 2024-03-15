@@ -30,16 +30,9 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
     bottom_path = -top_path
     left_path = -util.v_center(
         segment=lambda _: path.d([
-            -path.d.h(args.board.height),
-            util.v_center(
-                segment=lambda _: path.d([
-                    -path.d.h(args.dial.height),
-                    path.d.v(args.dial.width),
-                    path.d.h(args.dial.height),
-                ]),
-                height=args.board.width,
-            ),
-            path.d.h(args.board.height),
+            -path.d.h(args.dial.height),
+            path.d.v(args.dial.width),
+            path.d.h(args.dial.height),
         ]),
         height=width,
     )

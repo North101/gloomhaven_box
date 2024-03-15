@@ -57,8 +57,8 @@ class GloomhavenBoxArgs(args.SVGArgs):
 
   @property
   def vertical_divider_height(self):
-    return self.dimension.height + (self.dial.height * 2) + self.board.height
+    return self.dimension.height + self.dial.height
 
   @property
   def face_height(self):
-    return self.vertical_divider_height + self.pad.height
+    return self.vertical_divider_height + self.pad.height + self.board.height
