@@ -6,7 +6,7 @@ from ..args import GloomhavenBoxArgs
 
 
 @util.register_svg()
-class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
+class write_svg(util.SVGFile[GloomhavenBoxArgs]):
   def __call__(self, args: GloomhavenBoxArgs):
     helper = util.Tab(args.tab, args.thickness, args.kerf)
 
@@ -36,11 +36,10 @@ class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
             d=path.d([
                 path.d.m((d.width - args.thickness) / 2, 0),
                 util.v_slots(
-                    width=args.thickness,
-                    height=args.tab,
+                    thickness=args.thickness,
+                    slot=args.tab,
                     gap=args.tab,
                     max_height=d.height,
-                    padding=0,
                     kerf=args.kerf,
                 ),
             ]),
@@ -49,11 +48,10 @@ class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
             d=path.d([
                 path.d.m((d.width + args.thickness) / 2, (d.height - args.thickness) / 2),
                 util.h_slots(
-                    width=args.tab,
-                    height=args.thickness,
+                    thickness=args.thickness,
+                    slot=args.tab,
                     gap=args.tab,
                     max_width=args.horizontal_dividier_width,
-                    padding=0,
                     kerf=args.kerf,
                 ),
             ]),
@@ -62,11 +60,10 @@ class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
             d=path.d([
                 path.d.m(d.width - args.horizontal_dividier_width - args.thickness, (d.height - args.thickness) / 2),
                 util.h_slots(
-                    width=args.tab,
-                    height=args.thickness,
+                    thickness=args.thickness,
+                    slot=args.tab,
                     gap=args.tab,
                     max_width=args.horizontal_dividier_width,
-                    padding=0,
                     kerf=args.kerf,
                 ),
             ]),

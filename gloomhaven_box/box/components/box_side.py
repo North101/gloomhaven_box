@@ -12,35 +12,31 @@ class Variant(enum.Enum):
   RIGHT = enum.auto()
 
 
-@util.register_svgs(Variant)
-class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
-  def __init__(self, variant: Variant):
-    self.variant = variant
-
+@util.register_svg_variants(Variant)
+class write_svg(util.VariantSVGFile[GloomhavenBoxArgs, Variant]):
   def __call__(self, args: GloomhavenBoxArgs):
     helper = util.Tab(args.tab, args.thickness, args.kerf)
 
     height = args.face_height
     width = args.dimension.width
 
-    horizontal = helper.h_tabs(True, height, False)
-    vertical = path.d([
-        path.d.v(args.thickness),
-        path.placeholder(lambda w, h: helper.v_tabs(True, width - h, False)),
-        path.d.v(args.thickness),
-    ])
+    horizontal = helper.h_tabs(False, height, False)
+    vertical = util.v_pad(
+        path.placeholder(lambda w, h: helper.v_tabs(True, width - h, True)),
+        args.thickness,
+    )
     top_path = path.d([
-        path.d.h(args.thickness * 3),
-        path.d.v(args.thickness),
+        path.d.h(args.slot_padding),
+        path.d.h(args.thickness),
         horizontal,
     ])
     right_path = vertical
     bottom_path = -path.d([
         horizontal,
-        -path.d.v(args.thickness),
-        path.d.h(args.thickness * 3),
+        path.d.h(args.thickness),
+        path.d.h(args.slot_padding),
     ])
-    left_path = -path.d.v(vertical.fill_placeholders.height + (args.thickness * 2))
+    left_path = -path.d.v(vertical.fill_placeholders.height)
 
     d = path.d([
         path.d.m(0, 0),
@@ -54,17 +50,26 @@ class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
         path(attrs=path.attrs(
             d=d,
         ) | args.cut | path.attrs(fill='red')),
+        path(attrs=path.attrs(
+            d=path.d([
+                path.d.m(args.slot_padding + (args.kerf * 2), 0.001),
+                util.v_slot(
+                    thickness=args.thickness - (args.kerf * 2),
+                    slot=d.height - 0.002,
+                    kerf=0,
+                )
+            ]),
+        ) | args.engrave | path.attrs(fill='red')),
     ]
     if self.variant is Variant.RIGHT:
       children.append(path(attrs=path.attrs(
           d=path.d([
               path.d.m(d.width - args.thickness - args.dimension.height, (d.height - args.thickness) / 2),
               util.h_slots(
-                  width=args.tab,
-                  height=args.thickness,
+                  thickness=args.thickness,
+                  slot=args.tab,
                   gap=args.tab,
                   max_width=args.dimension.height,
-                  padding=0,
                   kerf=args.kerf,
               ),
           ]),

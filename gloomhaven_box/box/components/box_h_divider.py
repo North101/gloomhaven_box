@@ -6,7 +6,7 @@ from ..args import GloomhavenBoxArgs
 
 
 @util.register_svg()
-class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
+class write_svg(util.SVGFile[GloomhavenBoxArgs]):
   def __call__(self, args: GloomhavenBoxArgs):
     width = args.horizontal_dividier_width
     height = args.dimension.height
@@ -15,20 +15,18 @@ class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
     right_path = path.d.v(height)
     bottom_path = -util.h_tabs(
         out=True,
-        height=args.thickness,
-        width=args.tab,
+        thickness=args.thickness,
+        tab=args.tab,
         gap=args.tab,
         max_width=width,
-        padding=0,
         kerf=args.kerf,
     )
     left_path = -util.v_tabs(
         out=True,
-        height=args.tab,
-        width=args.thickness,
+        thickness=args.thickness,
+        tab=args.tab,
         gap=args.tab,
         max_height=height,
-        padding=0,
         kerf=args.kerf,
     )
 

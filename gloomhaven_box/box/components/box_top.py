@@ -1,37 +1,18 @@
-import enum
-
 import pysvg
 import pysvg_util as util
-from pysvg import Element, path, svg, transforms
+from pysvg import Element, path, svg
 
 from ..args import GloomhavenBoxArgs
 
 
-class Variant(enum.Enum):
-  TOP = enum.auto()
-  MIDDLE = enum.auto()
-  BOTTOM = enum.auto()
-
-
-@util.register_svgs(Variant)
-class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
-  def __init__(self, variant: Variant):
-    self.variant = variant
-
+@util.register_svg()
+class write_svg(util.SVGFile[GloomhavenBoxArgs]):
   def __call__(self, args: GloomhavenBoxArgs):
     length = args.dimension.length
-    width = args.dimension.width + (args.thickness * 2)
+    width = args.dimension.width
 
-    horizontal = util.h_tabs(
-        out=False,
-        height=args.thickness,
-        width=args.thickness,
-        gap=(length / 3) - args.thickness,
-        max_width=length,
-        padding=0,
-        kerf=0.07,
-    )
-    vertical = path.d.v(width)
+    horizontal = util.h_pad(path.d.h(length), args.slot_depth)
+    vertical = util.v_pad(path.d.v(width), args.thickness)
     top_path = horizontal
     right_path = vertical
     bottom_path = -horizontal
@@ -50,18 +31,6 @@ class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
             d=d,
         ) | args.cut | path.attrs(fill='red')),
     ]
-    if self.variant is Variant.MIDDLE:
-      children.append(
-          path(attrs=path.attrs(
-              transform=transforms.translate((length - args.board.length) / 2, (width - args.board.width) / 2),
-              d=path.d([
-                  path.d.h(args.board.length),
-                  path.d.v(args.board.width),
-                  -path.d.h(args.board.length),
-                  -path.d.v(args.board.width),
-              ]),
-          ) | args.cut | path.attrs(fill='red')),
-      )
 
     s = svg(
         attrs=svg.attrs(
@@ -72,4 +41,4 @@ class write_svg(util.RegisterSVGCallable[GloomhavenBoxArgs]):
         children=children,
     )
 
-    return args.output / util.filename(__file__, self.variant), s
+    return args.output / util.filename(__file__), s

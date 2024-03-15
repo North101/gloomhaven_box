@@ -19,6 +19,16 @@ class GloomhavenBoxArgs(args.SVGArgs):
       default=4.0,
       help='tab size (mm)',
   )
+  slot_depth: float = tap.arg(
+      type=types.PositiveFloat,
+      default=1.25,
+      help='slot depth (mm)',
+  )
+  slot_padding: float = tap.arg(
+      type=types.PositiveFloat,
+      default=1.0,
+      help='slot padding (mm)',
+  )
   board: types.Dimension = tap.arg(
       default=types.Dimension(
           length=types.PositiveFloat(145),
@@ -47,7 +57,7 @@ class GloomhavenBoxArgs(args.SVGArgs):
 
   @property
   def vertical_divider_height(self):
-    return self.dimension.height + (self.dial.height * 2)
+    return self.dimension.height + (self.dial.height * 2) + self.board.height
 
   @property
   def face_height(self):
