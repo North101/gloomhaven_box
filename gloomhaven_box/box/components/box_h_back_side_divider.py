@@ -9,7 +9,7 @@ from ..args import GloomhavenBoxArgs
 class write_svg(util.SVGFile[GloomhavenBoxArgs]):
   def __call__(self, args: GloomhavenBoxArgs):
     width = args.horizontal_dividier_width
-    height = args.horizontal_divider_height
+    height = args.vertical_divider_height
 
     top_path = path.d.h(width - 3)
     right_path = path.d([

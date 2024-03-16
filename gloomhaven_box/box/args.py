@@ -63,8 +63,16 @@ class GloomhavenBoxArgs(args.SVGArgs):
     return (self.dimension.length - self.thickness) / 6
 
   @property
+  def horizontal_middle_dividier_width(self):
+    return (self.horizontal_dividier_width * 2) + self.thickness
+
+  @property
   def horizontal_divider_height(self):
     return self.dimension.height
+
+  @property
+  def vertical_divider_width(self):
+    return 100
 
   @property
   def vertical_divider_height(self):

@@ -8,10 +8,10 @@ from ..args import GloomhavenBoxArgs
 @util.register_svg()
 class write_svg(util.SVGFile[GloomhavenBoxArgs]):
   def __call__(self, args: GloomhavenBoxArgs):
-    width = args.horizontal_dividier_width
-    height = args.horizontal_divider_height
+    width = args.horizontal_middle_dividier_width
+    height = args.vertical_divider_height
 
-    top_path = path.d.h(width - 3)
+    top_path = path.d.h(width - 6)
     right_path = path.d([
         util.corner_radius_br(3),
         path.d.v(height - 3),
@@ -24,14 +24,10 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
         max_width=width,
         kerf=args.kerf,
     )
-    left_path = -util.v_tabs(
-        out=True,
-        thickness=args.thickness,
-        tab=args.tab / 2,
-        gap=args.tab,
-        max_height=height,
-        kerf=args.kerf,
-    )
+    left_path = -path.d([
+        path.d.v(height - 3),
+        -util.corner_radius_tl(3),
+    ])
 
     d = path.d([
         path.d.m(args.thickness, 0),
@@ -44,6 +40,18 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
     children: list[Element | str] = [
         path(attrs=path.attrs(
             d=d,
+        ) | args.cut),
+        path(attrs=path.attrs(
+            d=path.d([
+                path.d.m((d.width - args.thickness) / 2, d.height - args.thickness - args.vertical_divider_height),
+                util.v_slots(
+                    thickness=args.thickness,
+                    slot=args.tab / 2,
+                    gap=args.tab,
+                    max_height=args.vertical_divider_height,
+                    kerf=args.kerf,
+                ),
+            ]),
         ) | args.cut),
     ]
 

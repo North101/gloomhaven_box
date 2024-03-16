@@ -1,3 +1,5 @@
+import enum
+
 import pysvg
 import pysvg_util as util
 from pysvg import Element, path, svg
@@ -5,8 +7,13 @@ from pysvg import Element, path, svg
 from ..args import GloomhavenBoxArgs
 
 
-@util.register_svg()
-class write_svg(util.SVGFile[GloomhavenBoxArgs]):
+class Variants(enum.Enum):
+  TOP = enum.auto()
+  BOTTOM = enum.auto()
+
+
+@util.register_svg_variants(Variants)
+class write_svg(util.VariantSVGFile[GloomhavenBoxArgs, Variants]):
   def __call__(self, args: GloomhavenBoxArgs):
     helper = util.Tab(args.tab, args.thickness, args.kerf)
 
@@ -32,19 +39,20 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
         path(attrs=path.attrs(
             d=d,
         ) | args.cut),
-        path(attrs=path.attrs(
-            d=path.d([
-                path.d.m((d.width - args.thickness) / 2, d.height - args.thickness - args.vertical_divider_height),
-                util.v_slots(
-                    thickness=args.thickness,
-                    slot=args.tab / 2,
-                    gap=args.tab,
-                    max_height=args.vertical_divider_height,
-                    kerf=args.kerf,
-                ),
-            ]),
-        ) | args.cut),
     ]
+    if self.variant == Variants.BOTTOM:
+      children.append(path(attrs=path.attrs(
+          d=path.d([
+              path.d.m((d.width - args.thickness) / 2, d.height - args.thickness - args.vertical_divider_height),
+              util.v_slots(
+                  thickness=args.thickness,
+                  slot=args.tab / 2,
+                  gap=args.tab,
+                  max_height=args.vertical_divider_height,
+                  kerf=args.kerf,
+              ),
+          ]),
+      ) | args.cut))
 
     s = svg(
         attrs=svg.attrs(

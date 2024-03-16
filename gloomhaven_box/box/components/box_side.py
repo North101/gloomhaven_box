@@ -60,11 +60,32 @@ class write_svg(util.VariantSVGFile[GloomhavenBoxArgs, Variant]):
                 )
             ]),
         ) | args.engrave | path.attrs(fill='red')),
+        path(attrs=path.attrs(
+            d=path.d([
+                path.d.m(
+                    x=d.width - args.vertical_divider_height - args.thickness,
+                    y=d.height - (args.vertical_divider_width + (args.thickness * 2)),
+                ),
+                util.h_slots(
+                    thickness=args.thickness,
+                    slot=args.tab / 2,
+                    gap=args.tab,
+                    max_width=args.vertical_divider_height,
+                    kerf=args.kerf,
+                ),
+            ]),
+        ) | args.cut)
     ]
     if self.variant is Variant.RIGHT:
       children.append(path(attrs=path.attrs(
           d=path.d([
-              path.d.m(d.width - args.thickness - args.horizontal_divider_height, (d.height - args.thickness) / 2),
+              path.d.m(
+                  x=d.width - args.thickness - args.horizontal_divider_height,
+                  y=(
+                      ((args.vertical_divider_width + (args.thickness * 2) - args.thickness) / 2) +
+                      (d.height - (args.vertical_divider_width + (args.thickness * 2)))
+                  ),
+              ),
               util.h_slots(
                   thickness=args.thickness,
                   slot=args.tab / 2,
