@@ -8,10 +8,28 @@ from ..args import GloomhavenBoxArgs
 @util.register_svg()
 class write_svg(util.SVGFile[GloomhavenBoxArgs]):
   def __call__(self, args: GloomhavenBoxArgs):
-    length = args.dimension.length
-    width = args.dimension.width
+    length = args.length
+    width = args.width
 
-    horizontal = util.h_pad(path.d.h(length), args.slot_depth)
+    horizontal = path.d([
+        path.d.h(args.thickness),
+        util.h_tab(
+            out=False,
+            thickness=args.magnet.width,
+            tab=args.magnet.length,
+            kerf=args.kerf,
+        ),
+        path.placeholder(
+            lambda w, h: path.d.h(length - w),
+        ),
+        util.h_tab(
+            out=False,
+            thickness=args.thickness,
+            tab=args.thickness,
+            kerf=args.kerf,
+        ),
+        path.d.h(args.thickness),
+    ])
     vertical = util.v_pad(path.d.v(width), args.thickness)
     top_path = horizontal
     right_path = vertical

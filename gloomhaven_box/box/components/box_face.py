@@ -17,12 +17,30 @@ class write_svg(util.VariantSVGFile[GloomhavenBoxArgs, Variants]):
   def __call__(self, args: GloomhavenBoxArgs):
     helper = util.Tab(args.tab, args.thickness, args.kerf)
 
-    length = args.dimension.length
+    length = args.length
     height = args.face_height
 
     horizontal = helper.h_tabs(True, length, False)
     vertical = helper.v_tabs(True, height, False)
-    top_path = path.d.h(length)
+    top_path = path.d([
+        path.d.h(args.thickness),
+        util.h_tab(
+            out=False,
+            thickness=args.magnet.height,
+            tab=args.magnet.length,
+            kerf=args.kerf,
+        ),
+        path.placeholder(
+            lambda w, h: path.d.h(length - w),
+        ),
+        util.h_tab(
+            out=False,
+            thickness=args.thickness,
+            tab=args.thickness,
+            kerf=args.kerf,
+        ),
+        path.d.h(args.thickness),
+    ])
     right_path = vertical
     bottom_path = -horizontal
     left_path = -vertical
@@ -63,4 +81,4 @@ class write_svg(util.VariantSVGFile[GloomhavenBoxArgs, Variants]):
         children=children,
     )
 
-    return args.output / util.filename(__file__), s
+    return args.output / util.filename(__file__, self.variant), s

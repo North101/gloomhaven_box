@@ -10,8 +10,8 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
   def __call__(self, args: GloomhavenBoxArgs):
     helper = util.Tab(args.tab, args.thickness, args.kerf)
 
-    length = args.dimension.length
-    width = args.dimension.width
+    length = args.length
+    width = args.width
 
     horizontal = helper.h_tabs(False, length, True)
     vertical = helper.v_tabs(False, width, True)

@@ -56,7 +56,7 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
                     thickness=args.thickness,
                     slot=args.tab / 2,
                     gap=args.tab,
-                    max_width=args.dimension.height,
+                    max_width=args.height,
                     kerf=args.kerf,
                 ),
             ]),
