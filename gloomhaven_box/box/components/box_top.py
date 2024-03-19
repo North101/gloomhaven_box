@@ -12,23 +12,21 @@ class write_svg(util.SVGFile[GloomhavenBoxArgs]):
     width = args.width
 
     horizontal = path.d([
-        path.d.h(args.thickness),
+        path.placeholder(lambda w, h: path.d.h((length - w) / 3)),
         util.h_tab(
             out=False,
-            thickness=args.magnet.width,
+            thickness=args.magnet.height,
             tab=args.magnet.length,
             kerf=args.kerf,
         ),
-        path.placeholder(
-            lambda w, h: path.d.h(length - w),
-        ),
+        path.placeholder(lambda w, h: path.d.h((length - w) / 3)),
         util.h_tab(
             out=False,
             thickness=args.thickness,
             tab=args.thickness,
             kerf=args.kerf,
         ),
-        path.d.h(args.thickness),
+        path.placeholder(lambda w, h: path.d.h((length - w) / 3)),
     ])
     vertical = util.v_pad(path.d.v(width), args.thickness)
     top_path = horizontal

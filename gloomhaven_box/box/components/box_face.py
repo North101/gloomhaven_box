@@ -8,8 +8,8 @@ from ..args import GloomhavenBoxArgs
 
 
 class Variants(enum.Enum):
-  TOP = enum.auto()
-  BOTTOM = enum.auto()
+  FRONT = enum.auto()
+  BACK = enum.auto()
 
 
 @util.register_svg_variants(Variants)
@@ -23,23 +23,21 @@ class write_svg(util.VariantSVGFile[GloomhavenBoxArgs, Variants]):
     horizontal = helper.h_tabs(True, length, False)
     vertical = helper.v_tabs(True, height, False)
     top_path = path.d([
-        path.d.h(args.thickness),
+        path.placeholder(lambda w, h: path.d.h((length - w) / 3)),
         util.h_tab(
             out=False,
             thickness=args.magnet.height,
             tab=args.magnet.length,
             kerf=args.kerf,
         ),
-        path.placeholder(
-            lambda w, h: path.d.h(length - w),
-        ),
+        path.placeholder(lambda w, h: path.d.h((length - w) / 3)),
         util.h_tab(
             out=False,
             thickness=args.thickness,
             tab=args.thickness,
             kerf=args.kerf,
         ),
-        path.d.h(args.thickness),
+        path.placeholder(lambda w, h: path.d.h((length - w) / 3)),
     ])
     right_path = vertical
     bottom_path = -horizontal
@@ -58,7 +56,7 @@ class write_svg(util.VariantSVGFile[GloomhavenBoxArgs, Variants]):
             d=d,
         ) | args.cut),
     ]
-    if self.variant == Variants.BOTTOM:
+    if self.variant == Variants.FRONT:
       children.append(path(attrs=path.attrs(
           d=path.d([
               path.d.m((d.width - args.thickness) / 2, d.height - args.thickness - args.vertical_divider_height),
